@@ -1,0 +1,25 @@
+.navbar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgb(167, 145, 145);
+  height: 50px;
+}
+
+.cart-section{
+    display: flex;
+    gap: 30px;
+}
+
+.favourite {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.numDisplay {
+  margin-top: -5px;
+  
+  font-size: 12px;
+  color: rgb(189, 39, 39);
+}
