@@ -1,6 +1,8 @@
 # Frontend project
 
-This repository for the Frontend project to build an e-commerce website.
+This repository for the Frontend project to build an e-commerce website.<br/>
+[https://steady-pasca-b7d483.netlify.app/](https://steady-pasca-b7d483.netlify.app/)
+
 
 ## Requirements
 
