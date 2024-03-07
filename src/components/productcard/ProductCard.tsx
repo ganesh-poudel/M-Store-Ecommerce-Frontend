@@ -11,12 +11,34 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { useAppDispatch } from "../../redux/store";
-import { addFav } from "../../redux/products/productSlice";
+import { addFav, addToCart, removeFavouriteItem } from "../../redux/products/productSlice";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export const ProductCart = ({ product }: { product: ProductType }) => {
+  const [pic, setPic] = useState<string[]>([]);
+  const [isFavourite, setIsFavourite] = useState(false);
   const { id, title, description, price, images, category } = product;
+  const img = "https://www.w3schools.com/w3images/mountains.jpg";
+  //  const { images } = (userList ?? [])[4] || {};
+  // console.log(JSON.parse(images))
+  const MyRegex = /[()[\]{}*+?^$|#,\\\\-]/gi;
+  // const thingy = images.map((entery) => {
+  //   const productImage = entery.replace(MyRegex, "").replace(/\"/gi, "");
 
+  // });
+
+  useEffect(() => {
+    if (images && images.length > 0) {
+      const processedImages = images.map((entry) => entry.replace(MyRegex, "").replace(/\"/gi, ""));
+      setPic(processedImages);
+    }
+  }, []);
+
+  // console.log("images=>", thingy);
+
+  //const thingy = ["https://cdn.pixabay.com/photo/2016/04/01/12/08/table-1300555_1280.png"];
+  // console.log(thingy[0]);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -33,12 +55,24 @@ export const ProductCart = ({ product }: { product: ProductType }) => {
   }));
 
   const addToFavHandler = (item: ProductType) => {
-    dispatch(addFav(item));
+    if (!isFavourite) {
+      dispatch(addFav(item));
+      setIsFavourite(true);
+    } 
+    if(isFavourite){
+      dispatch(removeFavouriteItem(item));
+      setIsFavourite(true);
+    }
   };
+  const addToCartHandler = (item: ProductType) => {
+    dispatch(addToCart(item));
+  };
+
   return (
     <Card sx={{ minWidth: "300", height: "100%" }}>
       <CardContent>
-        <StyledCardMedia image={category.image} />
+        {!pic.length && <h2>Pic not found</h2>}
+        <StyledCardMedia image={`${pic[0]}`} />
         <Typography
           sx={{ fontSize: 16, fontWeight: "600", color: "#263238", marginTop: "15px" }}
           color="text.secondary"
@@ -49,6 +83,7 @@ export const ProductCart = ({ product }: { product: ProductType }) => {
         <Typography sx={{ mb: 1.5, fontWeight: "600" }} color="text.secondary">
           {price} $
         </Typography>
+        <Typography>{id}</Typography>
       </CardContent>
       <CardActions sx={{ justifyContent: "center" }}>
         <Button
@@ -59,7 +94,12 @@ export const ProductCart = ({ product }: { product: ProductType }) => {
         >
           <Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} />
         </Button>
-        <Button size="small">
+        <Button
+          size="small"
+          onClick={() => {
+            addToCartHandler(product);
+          }}
+        >
           <AddShoppingCartIcon />
         </Button>
         <Button size="small" onClick={() => navigate(`/products/${id}`)}>

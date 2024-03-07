@@ -14,6 +14,16 @@ export interface UserType {
   role: "customer" | "admin";
 }
 
-export interface ResponseType {
-  
+export interface InitialState {
+  users: UserType[] | null;
+}
+
+export interface UserUpdate {
+  name: string;
+  email: string;
+}
+
+export interface UpdateQueryType {
+  id: number;
+  rest: UserUpdate;
 }

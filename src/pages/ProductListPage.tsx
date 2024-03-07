@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useAddSingleProductMutation, useGetAllProductsQuery } from "../redux/products/product.api";
 import { useState } from "react";
 import { ProductAddType } from "../redux/products/product";
-import { ProductCart } from "../components/productcard/ProductCart";
+import { ProductCart } from "../components/productcard/ProductCard";
 // import { Box, Grid } from "@mui/material";
 // import styled from "@emotion/styled";
 // import Paper from "@mui/material/Paper";

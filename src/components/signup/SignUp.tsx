@@ -1,17 +1,17 @@
-
-import { Grid, TextField, Button } from "@mui/material";
+import { Grid, TextField, Button, Typography } from "@mui/material";
 import { Formik, Form, FormikProps } from "formik";
 import { validationSchema } from "../../schemas/signUpSchema";
 import { useAddUserMutation, useGetAllUsersQuery } from "../../redux/users/userApi";
 import { UserRegistrationType } from "../../redux/users/user";
 import { useNavigate } from "react-router";
-
+import { useDispatch } from "react-redux";
+// import { saveUserInformation } from "../../redux/users/userSlice";
 
 const SignUp = () => {
-
   const { data: userList } = useGetAllUsersQuery();
   const [addUser] = useAddUserMutation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const addUserHandler = async (data: UserRegistrationType, resetForm: Function) => {
     const isUserExist = userList?.some((ele) => ele.email === data.email);
@@ -19,8 +19,9 @@ const SignUp = () => {
       try {
         const payload = await addUser(data).unwrap();
         console.log("fulfilled", payload);
+        // dispatch(saveUserInformation(payload));
         resetForm({});
-        navigate("/login")
+        navigate("/login");
       } catch (error) {
         console.error("rejected", error);
       }
@@ -52,7 +53,7 @@ const SignUp = () => {
           const { values, touched, errors, handleBlur, handleChange, isSubmitting } = props;
           return (
             <Form style={{ marginTop: "50px" }}>
-              <h1>Sign up</h1>
+              <Typography variant="h4">Register</Typography>
               <Grid container spacing={2} justifyContent="center">
                 <Grid item lg={10} md={10} sm={10} xs={10}>
                   <TextField
@@ -122,7 +123,7 @@ const SignUp = () => {
                     variant="contained"
                     color="secondary"
                     disabled={isSubmitting}
-                    sx={{ width: "26rem", height:"4rem" }}
+                    sx={{ width: "26rem", height: "4rem" }}
                   >
                     Submit
                   </Button>

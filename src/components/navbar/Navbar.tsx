@@ -4,6 +4,7 @@ import {
   Avatar,
   Badge,
   Box,
+  Button,
   Checkbox,
   InputBase,
   Menu,
@@ -22,11 +23,15 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppState } from "../../redux/store";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
-import profileIcon from '../../assets/6170186.png'
+import profileIcon from "../../assets/6170186.png";
+import { logout } from "../../redux/auth/authSlice";
+import { resetProducts } from "../../redux/products/productSlice";
+import { resetUsers } from "../../redux/users/userSlice";
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between",
+  height: "70px",
 });
 
 const Search = styled("div")(({ theme }) => ({
@@ -62,14 +67,25 @@ const LogoBox = styled(Box)(({ theme }) => ({
 }));
 
 const Navbar = () => {
-  const [open, setOpen] = useState(false);
-  const favItem = useSelector((state: AppState) => state.productReducer.favouriteList);
-  console.log(favItem);
+  const [open, setOpen] = React.useState(false);
+  const data = useSelector((state: AppState) => state.productReducer);
+  console.log("fav item ", data?.shopingCart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector((state: AppState) => state.authReducer.user);
+  const isLogin = useSelector((state: AppState) => state.authReducer.isAuthenticated);
+
+  const logoutHandler = () => {
+    if (isLogin) {
+      dispatch(logout());
+      dispatch(resetProducts());
+      dispatch(resetUsers());
+    }
+  };
+
   return (
-    <AppBar position="sticky" color="secondary">
-      <StyledToolbar>
+    <AppBar position="sticky">
+      <StyledToolbar color="#90a4ae">
         <LogoBox onClick={() => navigate("/")} sx={{ cursor: "pointer" }}>
           <MuseumOutlinedIcon />
           <Typography sx={{ display: { xs: "none", sm: "block" } }}>STORE</Typography>
@@ -105,51 +121,64 @@ const Navbar = () => {
 
         <Icons>
           <Badge
-            badgeContent={favItem.length}
+            badgeContent={data.favouriteList?.length}
             color="error"
             sx={{ cursor: "pointer" }}
             onClick={() => navigate("favourites")}
           >
             <FavoriteBorderIcon />
           </Badge>
-          <Badge badgeContent={2} color="error">
+
+          <Badge
+            badgeContent={data.shopingCart?.length}
+            color="error"
+            sx={{ cursor: "pointer" }}
+            onClick={() => navigate("cart")}
+          >
             <ShoppingCartIcon />
           </Badge>
-          {/* <Avatar
-            sx={{ width: 30, height: 30 }}
-            src="https://images.pexels.com/photos/846741/pexels-photo-846741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            onClick={(e) => setOpen(true)}
-          /> */}
         </Icons>
+        {isLogin && user?.role === "admin" && (
+          <Button variant="contained" sx={{ height: "30px", background: "#009688" }} onClick={() => navigate("/admin")}>
+            Admin
+          </Button>
+        )}
 
-        <UserBox sx={{cursor:"pointer"}}>
-          <LoginRoundedIcon onClick={() => navigate("login")} />
-          <Avatar
-            sx={{ width: 30, height: 30 }}
-            src={profileIcon}
-            onClick={(e) => setOpen(true)}
-          />
+        <UserBox sx={{ cursor: "pointer" }}>
+          {!user?.avatar && (
+            <LoginRoundedIcon
+              onClick={() => {
+                navigate("login");
+                setOpen(true);
+              }}
+            />
+          )}
+
+          {/* <Avatar sx={{ width: 30, height: 30 }} src={profileIcon} onClick={(e) => setOpen(true)} /> */}
+          <Avatar sx={{ width: 30, height: 30 }} src={user?.avatar} onClick={(e) => setOpen(true)} />
           {/* <Typography>John</Typography> */}
         </UserBox>
       </StyledToolbar>
-      <Menu
-        id="demo-positioned-menu"
-        aria-labelledby="demo-positioned-button"
-        open={open}
-        onClose={(e) => setOpen(false)}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-      >
-        <MenuItem>Profile</MenuItem>
-        <MenuItem>My account</MenuItem>
-        <MenuItem>Logout</MenuItem>
-      </Menu>
+      {user && (
+        <Menu
+          id="demo-positioned-menu"
+          aria-labelledby="demo-positioned-button"
+          open={open}
+          onClose={(e) => setOpen(false)}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+        >
+          <MenuItem onClick={() => navigate("login/profile")}>Profile</MenuItem>
+          <MenuItem>My account</MenuItem>
+          <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+        </Menu>
+      )}
     </AppBar>
   );
 };

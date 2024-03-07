@@ -1,21 +1,60 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import productReducer from "./products/productSlice";
 import { useDispatch } from "react-redux";
 import { usersApi } from "./users/userApi";
 import { productsApi } from "./products/product.api";
 import { authApi } from "./auth/authApi";
+import userReducer from "./users/userSlice";
+import authReducer from "./auth/authSlice";
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+
+const rootReducer = combineReducers({
+  productReducer,
+  userReducer,
+  authReducer,
+  [usersApi.reducerPath]: usersApi.reducer,
+  [productsApi.reducerPath]: productsApi.reducer,
+  [authApi.reducerPath]: authApi.reducer,
+});
+
+const persistConfig = {
+  key: "root",
+  storage,
+  version: 1,
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 // stores all states
 const store = configureStore({
-  reducer: {
-    productReducer,
-    [usersApi.reducerPath]: usersApi.reducer,
-    [productsApi.reducerPath]: productsApi.reducer,
-    [authApi.reducerPath]: authApi.reducer,
-  },
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([usersApi.middleware, productsApi.middleware, authApi.middleware]),
 });
 export type AppState = ReturnType<typeof store.getState>;
 export const useAppDispatch = () => useDispatch<typeof store.dispatch>();
+
+// store.subscribe(() => {
+//   // get the states of all slices
+//   const currentState = store.getState();
+//   // need to get userSlice state only
+//   // const userInformation = currentState.userReducer.user;
+//   // // save user state in local storage
+//   // localStorage.setItem("userInformation", JSON.stringify(userInformation));
+//   // need to get authSlice state only
+//   const loginToken = currentState.authReducer.accessToken;
+//   localStorage.setItem("accessToken", JSON.stringify(loginToken));
+
+//   const user = currentState.authReducer.user;
+//   localStorage.setItem("currentUser", JSON.stringify(user));
+
+//   const favItem = currentState.productReducer.favouriteList;
+//   localStorage.setItem("favItem", JSON.stringify(favItem));
+
+//   const shopingCart = currentState.productReducer.shopingCart;
+//   localStorage.setItem("shopCart", JSON.stringify(shopingCart));
+// });
+
 export default store;
+export const persistor = persistStore(store);

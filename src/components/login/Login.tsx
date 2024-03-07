@@ -1,38 +1,61 @@
 import { Grid, TextField, Button, Typography } from "@mui/material";
 import { Formik, Form, FormikProps } from "formik";
 import { validationSchema } from "../../schemas/LoginSchema";
-import { useAddUserMutation, useGetAllUsersQuery } from "../../redux/users/userApi";
-import { UserRegistrationType } from "../../redux/users/user";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { UserLoginType } from "../../redux/auth/auth";
-import { useLoginMutation } from "../../redux/auth/authApi";
-import { useState } from "react";
+import { UserLoginResponseType, UserLoginType } from "../../redux/auth/auth";
+import { useLazyUserSessionQuery, useLoginMutation, useUserSessionQuery } from "../../redux/auth/authApi";
+import { useEffect, useState } from "react";
 import { isFetchBaseQueryError } from "../../utils/loginHelper";
+import { useDispatch, useSelector } from "react-redux";
+import { AppState } from "../../redux/store";
+import { logout, saveLoginToken, setUser } from "../../redux/auth/authSlice";
 
 export const Login = () => {
   const navigate = useNavigate();
   const [login] = useLoginMutation();
-  const [success, setSuccess] = useState("");
-  const [error, setError] = useState("");
+  const [inputError, setInputError] = useState("");
+  const [isData, setIsData] = useState(true);
+  const dispatch = useDispatch();
+  const currentUserInfo = useSelector((state:AppState) => state.authReducer.user);
+  const accessToken = useSelector((state: AppState) => state.authReducer.accessToken);
+  const [getUser, { data: user }] = useLazyUserSessionQuery();
 
-  const userLoginHandler = async (data: UserLoginType, resetForm: Function) => {
-    try {
-      const payLoad = await login(data).unwrap();
-      console.log("payload =>", payLoad);
-    } catch (error) {
-      if (isFetchBaseQueryError(error)) {
-        console.log(error.status);
-        setError(error.status.toString());
-      }
-      console.log("error =>", error);
-    }
+  const userLoginHandler = async (credients: UserLoginType, resetForm: Function) => {
+    await login(credients)
+      .unwrap()
+      .then((data) => {
+        const { access_token } = data;
+        dispatch(saveLoginToken(access_token));
+        getUser()
+          .unwrap()
+          .then((data) => {
+            dispatch(setUser(data));
+          });
+        navigate('/products')
+      })
+      .catch((err) => {
+        setInputError(err.data.message);
+      });
   };
 
+  if (accessToken) {
+    return (
+      <div>
+        <div>
+          welcome {currentUserInfo?.name}
+          <p>{currentUserInfo?.role}</p>
+          <p>{currentUserInfo?.email}</p>
+          <p>{currentUserInfo?.password}</p>
+          <button>Admin panel</button>
+        </div>
+      </div>
+    );
+  }
+
+  // https://www.zeldadungeon.net/wiki/Link#/media/File:Link_-_TotK_key_art_nobg.png
   return (
     <div>
-      <div>{error}</div>
       <Formik
         initialValues={{
           email: "",
@@ -51,8 +74,7 @@ export const Login = () => {
           return (
             <Form style={{ marginTop: "50px" }}>
               <Grid item lg={10} md={10} sm={10} xs={10}>
-                <Typography variant="h5">Welcome Back</Typography>
-                <Typography>Enter your credentials for login</Typography>
+                <Typography variant="h4">Login</Typography>
               </Grid>
               <Grid item lg={10} md={10} sm={10} xs={10}>
                 <TextField

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { UserRegistrationType, UserType } from "./user";
+import { UpdateQueryType, UserRegistrationType, UserType, UserUpdate } from "./user";
 
 export const usersApi = createApi({
   reducerPath: "usersApi",
@@ -22,8 +22,8 @@ export const usersApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
-    updateUser: builder.mutation<void, UserType>({
-      query: ({ id, ...rest }) => ({
+    updateUser: builder.mutation<void, UpdateQueryType>({
+      query: ({ id, rest }) => ({
         url: `/users/${id}`,
         method: "PUT",
         body: rest,
@@ -46,4 +46,5 @@ export const {
   useAddUserMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useLazyGetSingleUserQuery
 } = usersApi;
