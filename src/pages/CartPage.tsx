@@ -49,7 +49,7 @@ export const CartPage = () => {
     <Box mt="70px">
       <Grid container justifyContent="center" spacing={6}>
         {!cartItems?.length && <h1> Cart Is Empty</h1>}
-        <Card sx={{ width: "800px" }}>
+        <Card sx={{ width: "800px", marginTop: "100px" }}>
           <List sx={{ width: "100%", maxWidth: 800, bgcolor: "background.paper" }}>
             {cartItems?.map((item) => (
               <ListItem alignItems="flex-start" key={item.id}>
@@ -77,11 +77,15 @@ export const CartPage = () => {
           </List>
         </Card>
       </Grid>
-      <Box display="flex" gap={3} justifyContent="center">
-        <Typography>Total Amount</Typography>
-        <Typography>{total}</Typography>
-      </Box>
-      <Button onClick={checkOutHandler}>checkout</Button>
+      {cartItems.length && (
+        <Box>
+          <Box display="flex" gap={3} justifyContent="center">
+            <Typography>Total Amount</Typography>
+            <Typography>{total}</Typography>
+          </Box>
+          <Button onClick={checkOutHandler}>checkout</Button>
+        </Box>
+      )}
     </Box>
   );
 };

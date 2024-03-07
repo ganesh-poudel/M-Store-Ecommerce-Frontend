@@ -50,13 +50,6 @@ export const AdminPage = () => {
             <Paper sx={{ width: 320, maxWidth: "100%" }}>
               <MenuList>
                 <MenuItem>
-                  <ListItemIcon>
-                    <StyledAddIcon></StyledAddIcon>
-                  </ListItemIcon>
-                  <ListItemText primary="Add New User" />
-                </MenuItem>
-                <MenuItem>
-              
                   <CreateProductModal />
                 </MenuItem>
               </MenuList>

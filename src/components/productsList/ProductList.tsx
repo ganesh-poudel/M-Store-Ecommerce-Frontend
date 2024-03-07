@@ -61,7 +61,7 @@ export const ProductList = () => {
             return (
               <ListItem sx={{ display: "flex", justifyContent: "space-evenly" }}>
                 <ListItemAvatar>
-                  <Avatar sx={{ width: 30, height: 30 }} src={item?.category.image} />
+                  <Avatar sx={{ width: 30, height: 30 }} src={item.images[0]} />
                 </ListItemAvatar>
                 <ListItemText primary={item.title} />
                 <Box gap="20px" display="flex">

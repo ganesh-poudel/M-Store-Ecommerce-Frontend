@@ -56,7 +56,7 @@ export const CreateProductModal = () => {
   return (
     <Box>
       <Box display="flex" alignItems="center" justifyContent="center">
-        <AddCircleIcon />
+        <AddCircleIcon sx={{color:"red"}} />
         <Button onClick={handleOpen}>ADD NEW PRODUCT</Button>
       </Box>
       <Modal
