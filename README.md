@@ -1,9 +1,16 @@
-# Frontend project
+# Getting Started with Create React App
 
-This repository for the Frontend project to build an e-commerce website.<br/>
-[https://steady-pasca-b7d483.netlify.app/](https://steady-pasca-b7d483.netlify.app/)
+This project is was bootstrapped with
+[Create React App.](https://steady-pasca-b7d483.netlify.app/)
 
+### Available Scripts
+In the project directory, you can run:
 
+### npm start / yarn run start
+Runs the app in the development mode.<br>
+Open http://localhost:3000 to view it in your browser.
+
+## Requirements
 ## Requirements
 
 ### Basic requirements

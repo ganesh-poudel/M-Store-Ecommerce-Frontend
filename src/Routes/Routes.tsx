@@ -3,7 +3,6 @@ import App from "../App";
 import { HomePage } from "../pages/HomePage";
 import { ProductListPage } from "../pages/ProductListPage";
 import { FavouritePage } from "../pages/FavouritePage";
-import { UserTestPage } from "../pages/UserTestPage";
 
 import { UserRegisterPage } from "../pages/UserRegisterPage";
 import { ContactPage } from "../pages/ContactPage";
@@ -30,7 +29,6 @@ export const router = createBrowserRouter([
       { path: "products/:id", element: <ProductDetailPage /> },
       { path: "contact", element: <ContactPage /> },
       { path: "favourites", element: <FavouritePage /> },
-      { path: "users", element: <UserTestPage /> },
       { path: "login", element: <UserLoginPage /> },
       { path: "cart", element: <CartPage /> },
       { path: "checkout", element: <CheckOutMesage /> },

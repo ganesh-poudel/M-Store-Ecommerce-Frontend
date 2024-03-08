@@ -99,10 +99,12 @@ const Navbar = () => {
 
   const handleClickCategory = (id: number) => {
     dispatch(addCategoryId(id));
+    handleClose();
   };
 
   const handleProduct = () => {
     dispatch(addCategoryId(0));
+    navigate("/products");
   };
 
   return (

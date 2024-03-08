@@ -61,6 +61,9 @@ const productSlice = createSlice({
       }
     },
     addCategoryId: (state, action: PayloadAction<number>) => {
+      if (action.payload === 0) {
+        state.categoryId = 0
+      }
       state.categoryId = action.payload;
       console.log("cat id " , state.categoryId)
     },
