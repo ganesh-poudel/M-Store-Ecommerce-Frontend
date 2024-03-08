@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { ProductType, ProductAddType } from "./product";
+import { ProductType, ProductAddType, CategoryType } from "./product";
 
 export const productsApi = createApi({
   reducerPath: "productsApi",
@@ -37,6 +37,24 @@ export const productsApi = createApi({
       }),
       invalidatesTags: ["Product"],
     }),
+    filterByTitle: builder.query<ProductType[], string>({
+      query: (title) => ({
+        url: `/products/?title=${title}`,
+        providesTags: ["Product"],
+      }),
+    }),
+    getAllCategory: builder.query<CategoryType[], void>({
+      query: () => ({
+        url: `/categories`,
+        providesTags: ["Product"],
+      }),
+    }),
+    getProductByCategory: builder.query<ProductType[], number>({
+      query: (id) => ({
+        url: `/categories/${id}/products`,
+        providesTags: ["Product"],
+      }),
+    }),
   }),
 });
 
@@ -45,4 +63,8 @@ export const {
   useAddSingleProductMutation,
   useGetSingleProductQuery,
   useDeleteProductMutation,
+  useFilterByTitleQuery,
+  useGetAllCategoryQuery,
+  useGetProductByCategoryQuery,
+  useLazyGetProductByCategoryQuery
 } = productsApi;

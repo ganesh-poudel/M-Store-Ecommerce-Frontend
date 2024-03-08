@@ -3,10 +3,11 @@
 export interface InitialStateType {
   products: ProductType[];
   favouriteList: ProductType[];
-  shopingCart: ProductType[];
+  shopingCart: CartType[];
   loading: boolean;
   searchString: string;
   error?: string;
+  categoryId: number;
 }
 
 export interface ProductType {
@@ -16,6 +17,17 @@ export interface ProductType {
   description: string;
   category: CategoryType;
   images: string[];
+}
+
+export interface CartType {
+  id: number;
+  title: string;
+  price: number;
+  description: string;
+  category: CategoryType;
+  images: string[];
+  quantity: number;
+  totalPrice: number;
 }
 
 export interface CategoryType {

@@ -4,13 +4,12 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { CardMedia, Checkbox, makeStyles } from "@mui/material";
-import { ProductType } from "../../redux/products/product";
+import { CardMedia, Checkbox } from "@mui/material";
+import { CartType, ProductType } from "../../redux/products/product";
 import styled from "@emotion/styled";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { useAppDispatch } from "../../redux/store";
 import { addFav, addToCart, removeFavouriteItem } from "../../redux/products/productSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -18,15 +17,12 @@ import { useEffect, useState } from "react";
 export const ProductCart = ({ product }: { product: ProductType }) => {
   const [pic, setPic] = useState<string[]>([]);
   const [isFavourite, setIsFavourite] = useState(false);
-  const { id, title, description, price, images, category } = product;
-  const img = "https://www.w3schools.com/w3images/mountains.jpg";
-  //  const { images } = (userList ?? [])[4] || {};
-  // console.log(JSON.parse(images))
-  const MyRegex = /[()[\]{}*+?^$|#,\\\\-]/gi;
-  // const thingy = images.map((entery) => {
-  //   const productImage = entery.replace(MyRegex, "").replace(/\"/gi, "");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { id, title, price, images } = product;
+  const cart = { ...product, quantity: 1, totalPrice: product.price };
 
-  // });
+  const MyRegex = /[()[\]{}*+?^$|#,\\\\-]/gi;
 
   useEffect(() => {
     if (images && images.length > 0) {
@@ -35,18 +31,9 @@ export const ProductCart = ({ product }: { product: ProductType }) => {
     }
   }, []);
 
-  // console.log("images=>", thingy);
-
-  //const thingy = ["https://cdn.pixabay.com/photo/2016/04/01/12/08/table-1300555_1280.png"];
-  // console.log(thingy[0]);
-  const dispatch = useDispatch();
-
-  const navigate = useNavigate();
-
   const StyledCardMedia = styled(CardMedia)(({ theme }) => ({
     display: "block",
     height: "15rem",
-    // border: "1px solid black",
     marginLeft: "auto",
     marginRight: "auto",
     minWidth: "100px",
@@ -58,13 +45,13 @@ export const ProductCart = ({ product }: { product: ProductType }) => {
     if (!isFavourite) {
       dispatch(addFav(item));
       setIsFavourite(true);
-    } 
-    if(isFavourite){
+    }
+    if (isFavourite) {
       dispatch(removeFavouriteItem(item));
       setIsFavourite(true);
     }
   };
-  const addToCartHandler = (item: ProductType) => {
+  const addToCartHandler = (item: CartType) => {
     dispatch(addToCart(item));
   };
 
@@ -97,7 +84,7 @@ export const ProductCart = ({ product }: { product: ProductType }) => {
         <Button
           size="small"
           onClick={() => {
-            addToCartHandler(product);
+            addToCartHandler(cart);
           }}
         >
           <AddShoppingCartIcon />

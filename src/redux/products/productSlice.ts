@@ -1,17 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { InitialStateType, ProductType } from "../../redux/products/product";
-
-// let cart: ProductType[] | null = null;
-// const dataShopingCart = localStorage.getItem("shopCart");
-// if (dataShopingCart !== null) {
-//   cart = JSON.parse(dataShopingCart);
-// }
-
-// let favourite: ProductType[] | null = null;
-// const dataFavourite = localStorage.getItem("favItem");
-// if (dataFavourite !== null) {
-//   favourite = JSON.parse(dataFavourite);
-// }
+import { CartType, InitialStateType, ProductType } from "../../redux/products/product";
 
 const initialState: InitialStateType = {
   products: [],
@@ -19,6 +7,7 @@ const initialState: InitialStateType = {
   shopingCart: [],
   searchString: "",
   loading: false,
+  categoryId: 0,
 };
 
 const productSlice = createSlice({
@@ -32,11 +21,12 @@ const productSlice = createSlice({
       state.favouriteList.push(action.payload);
       console.log("addfav", state.favouriteList);
     },
-    addToCart: (state, action: PayloadAction<ProductType>) => {
+    addToCart: (state, action: PayloadAction<CartType>) => {
       if (state.shopingCart.some((e) => e.id === action.payload.id)) {
         return;
       }
       state.shopingCart.push(action.payload);
+      console.log("cart state", state.shopingCart);
     },
     resetProducts: (state) => {
       state.favouriteList = [];
@@ -51,15 +41,44 @@ const productSlice = createSlice({
     removeFavouriteItem: (state, action: PayloadAction<ProductType>) => {
       const filteredFavouriteItem = state.favouriteList.filter((item) => item.id !== action.payload.id);
       state.favouriteList = filteredFavouriteItem;
-      console.log("removeFavourite", state.favouriteList);
     },
     cartCheckOut: (state) => {
       state.shopingCart = [];
     },
+    searchProduct: (state, action: PayloadAction<string>) => {
+      state.searchString = action.payload;
+    },
+    addCartItemQuantity: (state, action: PayloadAction<number>) => {
+      const cart = state.shopingCart[action.payload];
+      cart.quantity++;
+      cart.totalPrice = cart.quantity * cart.price;
+    },
+    removeCartItemQuantity: (state, action: PayloadAction<number>) => {
+      const cart = state.shopingCart[action.payload];
+      if (cart.quantity > 1) {
+        cart.quantity--;
+        cart.totalPrice = cart.quantity * cart.price;
+      }
+    },
+    addCategoryId: (state, action: PayloadAction<number>) => {
+      state.categoryId = action.payload;
+      console.log("cat id " , state.categoryId)
+    },
   },
 });
 
-export const { addFav, addToCart, resetProducts, removeItemFromCart, removeFavouriteItem, cartCheckOut } = productSlice.actions;
+export const {
+  addFav,
+  addToCart,
+  resetProducts,
+  removeItemFromCart,
+  removeFavouriteItem,
+  cartCheckOut,
+  searchProduct,
+  addCartItemQuantity,
+  removeCartItemQuantity,
+  addCategoryId,
+} = productSlice.actions;
 
 const productReducer = productSlice.reducer;
 export default productReducer;

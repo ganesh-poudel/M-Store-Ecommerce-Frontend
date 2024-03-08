@@ -38,6 +38,7 @@ const style = {
 };
 
 export const ProductList = () => {
+  
   let [page, setPage] = useState(1);
   const { data: products } = useGetAllProductsQuery();
   const [deleteItem] = useDeleteProductMutation();
