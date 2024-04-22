@@ -41,19 +41,3 @@ The Front end project must use TypeScript and Redux toolkit.
 - Use pagination when fetching/displaying all the products
 - Implement performance optimization where applicable
 
-## Grading (1-5)
-
-1: Late submission or not complete basic requirements
-
-2: Basic requirement + Presentation
-
-3: Folder structure + follow convention(naming convention ,loading, error) + some additional features
-
-4: All additional features + reusable logic + custom hook
-
-5: UI-UX (for example: send alert when user add same product) + styling (animation or transition, scroll to top) + advanced feature (google log in)
-
-## Deadline
-
-- Presentation: **7/3** and **8/3/ 2024**
-- Submitting Front-end project **10am 8/3/2024**
