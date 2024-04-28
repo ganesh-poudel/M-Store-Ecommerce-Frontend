@@ -1,41 +1,41 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { UpdateQueryType, UserRegistrationType, UserType, UserUpdate } from "./user";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { UpdateQueryType, UserRegistrationType, UserType} from './user';
 
 export const usersApi = createApi({
-  reducerPath: "usersApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "https://api.escuelajs.co/api/v1" }),
-  tagTypes: ["User"],
+  reducerPath: 'usersApi',
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080/api/v1' }),
+  tagTypes: ['User'],
   endpoints: (builder) => ({
     getAllUsers: builder.query<UserType[], void>({
       query: () => `/users`,
-      providesTags: ["User"],
+      providesTags: ['User'],
     }),
     getSingleUser: builder.query<UserType, number>({
       query: (id) => `/users/${id}`,
-      providesTags: ["User"],
+      providesTags: ['User'],
     }),
     addUser: builder.mutation<UserType, UserRegistrationType>({
       query: (user) => ({
         url: `/users`,
-        method: "POST",
+        method: 'POST',
         body: user,
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ['User'],
     }),
     updateUser: builder.mutation<void, UpdateQueryType>({
       query: ({ id, rest }) => ({
         url: `/users/${id}`,
-        method: "PUT",
+        method: 'PUT',
         body: rest,
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ['User'],
     }),
-    deleteUser: builder.mutation<void, number>({
+    deleteUser: builder.mutation<void, string>({
       query: (id) => ({
         url: `/users/${id}`,
-        method: "DELETE",
+        method: 'DELETE',
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ['User'],
     }),
   }),
 });
@@ -46,5 +46,5 @@ export const {
   useAddUserMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
-  useLazyGetSingleUserQuery
+  useLazyGetSingleUserQuery,
 } = usersApi;

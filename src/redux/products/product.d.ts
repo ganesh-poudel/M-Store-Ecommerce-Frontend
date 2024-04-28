@@ -1,6 +1,6 @@
 // ProductSlice initial state
 
-export interface InitialStateType {
+export type InitialStateType = {
   products: ProductType[];
   total: number;
   favouriteList: ProductType[];
@@ -8,16 +8,16 @@ export interface InitialStateType {
   loading: boolean;
   searchString: string;
   error?: string;
-}
+};
 
 export type Product = {
   total: number;
   products: ProductType[];
 };
 
-export interface ProductType {
+export type ProductType = {
   _id: string;
-  size: string;
+  sizes: string[];
   name: string;
   price: number;
   description: string;
@@ -30,8 +30,7 @@ export interface ProductType {
   };
   createdAt: string;
   _v: number;
-  quantity: number;
-}
+};
 
 export interface CategoryType {
   _id: string;
@@ -39,14 +38,13 @@ export interface CategoryType {
   image: string;
 }
 
-export type ProductAddType = omit<ProductType, 'category', 'id'>;
-
 export interface CreateProductType {
-  title: string;
+  name: string;
   price: number;
   description: string;
-  categoryId: number;
+  category: string;
   images: string[];
+  sizes: Size[];
 }
 
 // FILTERING

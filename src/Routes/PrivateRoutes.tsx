@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { AppState } from "../redux/store";
 import { useSelector } from "react-redux";
-import { ROLE } from "../utils/roles";
+
+import { AppState } from '../redux/store';
 
 export type ProtectedRouteProps = {
   isAuthenticated: boolean;
@@ -14,9 +14,6 @@ const ProtectedRoute = () => {
   if (authUser && authUser.isAuthenticated ) {
     return <Outlet />;
   }
-  // } else if ((authUser && authUser.isAuthenticated) || role === authUser.role) {
-  //    return <Outlet />;
-  // }
   return <Navigate to="/login" replace />;
 };
 

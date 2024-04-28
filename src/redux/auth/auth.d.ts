@@ -1,4 +1,4 @@
-import { UserType } from "../users/user";
+import { UserType } from '../users/user';
 
 export interface UserLoginType {
   email: string;
@@ -6,17 +6,22 @@ export interface UserLoginType {
 }
 
 export interface UserLoginResponseType {
-  access_token: string;
-  refresh_token: string;
+  tokens: Tokens;
+  user: UserType;
 }
 
 export interface InitalLoginStateType {
   accessToken: string;
   isAuthenticated: boolean;
-  role: "customer" | "admin" | null;
+  role: 'customer' | 'admin' | null;
   user: UserType | null;
 }
 
 export interface AuthType {
   Authorization: string;
+}
+
+export interface Tokens {
+  accessToken: string;
+  refreshToken: string;
 }

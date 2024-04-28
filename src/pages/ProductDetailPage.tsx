@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
 import { useGetSingleProductQuery } from '../redux/products/product.api';
 import CartIcon from '../components/icons/CartIcon';
+import { ProductType } from '../redux/products/product';
+import { addToCart } from '../redux/cart/cartSlice';
 
 const ProductDetailPage = () => {
   const [value, setValue] = useState(1);
+  const dispatch = useDispatch();
+
   const { id } = useParams();
-  console.log(id);
+
   if (id !== undefined) {
   }
   const { data } = useGetSingleProductQuery(id as string);
-  console.log('data =>', data);
 
   const decrement = () => {
     if (value > 1) {
@@ -22,6 +27,11 @@ const ProductDetailPage = () => {
     setValue(value + 1);
   };
 
+  const addToCartHandler = (item: ProductType, quantity: number) => {
+    console.log('item', item);
+    dispatch(addToCart({ product: item, quantity }));
+  };
+
   return (
     <div className=" flex-grow h-96 card rounded-box place-items-center mt-24 w-2/3 mx-auto bg-zinc-400">
       <div className="flex flex-col w-full lg:flex-row">
@@ -31,7 +41,7 @@ const ProductDetailPage = () => {
               let id = `item${index + 1}`;
               return (
                 <div id={id} className="carousel-item w-full h-72  ">
-                  <img src={image} alt={data.name}  />
+                  <img src={image} alt={data.name} />
                 </div>
               );
             })}
@@ -47,7 +57,6 @@ const ProductDetailPage = () => {
             })}
           </div>
         </div>
-        {/* <div className="divider lg:divider-horizontal"></div> */}
         <div className="grid flex-grow h-96 card w-1/2 rounded-box place-items-top-center ">
           <div className="sm:flex-1 p-3 md:p-5 text-color-primary sm:self-start">
             <h1 className="text-xl md:text-2xl font-medium pb-4 mb-5 border-b ">{data?.name}</h1>
@@ -80,7 +89,12 @@ const ProductDetailPage = () => {
                 </button>
               </div>
               <div className="mt-3 round bg-red">
-                <button className="btn btn-active btn-accent hover:bg-violet-600">
+                <button
+                  className="btn btn-active btn-accent hover:bg-violet-600"
+                  onClick={() => {
+                    addToCartHandler(data as ProductType, value);
+                  }}
+                >
                   <CartIcon />
                 </button>
               </div>

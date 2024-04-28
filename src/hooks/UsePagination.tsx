@@ -1,11 +1,9 @@
-import { useState } from "react";
-
+import { useState } from 'react';
 
 interface DataArray<T> {
-  // data: Products[];
   data: T[];
   itemsPerPage: number;
-};
+}
 
 export const usePagination = <T,>({ data, itemsPerPage }: DataArray<T>) => {
   const [currentPage, setCurrentPage] = useState(1);

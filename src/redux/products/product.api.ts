@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ProductType, ProductAddType, CategoryType, Product, Filter } from './product';
+
+import { ProductType, CreateProductType,  Product, Filter } from './product';
 
 export const productsApi = createApi({
   reducerPath: 'productsApi',
@@ -17,7 +18,7 @@ export const productsApi = createApi({
       query: (id) => `/products/${id}`,
       providesTags: ['Products'],
     }),
-    addSingleProduct: builder.mutation<void, ProductAddType>({
+    addSingleProduct: builder.mutation<void, CreateProductType>({
       query: (product) => ({
         url: `/products`,
         method: 'POST',
@@ -33,7 +34,7 @@ export const productsApi = createApi({
       }),
       invalidatesTags: ['Products'],
     }),
-    deleteProduct: builder.mutation<void, number>({
+    deleteProduct: builder.mutation<void, string>({
       query: (id) => ({
         url: `/products/${id}`,
         method: 'DELETE',
@@ -46,18 +47,6 @@ export const productsApi = createApi({
         providesTags: ['Product'],
       }),
     }),
-    // getAllCategory: builder.query<CategoryType[], void>({
-    //   query: () => ({
-    //     url: `/categories`,
-    //     providesTags: ['Product'],
-    //   }),
-    // }),
-    // getProductByFilter: builder.query<ProductType[], number>({
-    //   query: (id) => ({
-    //     url: `/categories/${id}/products`,
-    //     providesTags: ['Product'],
-    //   }),
-    // }),
     getProductByFilter: builder.query<Product, Partial<Filter>>({
       query: (args) => ({
         url: `/products/?category=${args.category}&min_price=${args.min_price}&size=${args.size}`,
@@ -74,7 +63,7 @@ export const {
   useGetSingleProductQuery,
   useDeleteProductMutation,
   useFilterByTitleQuery,
-  // useGetAllCategoryQuery,
+  useUpdateProductMutation,
   useGetProductByFilterQuery,
   useLazyGetProductByFilterQuery,
 } = productsApi;

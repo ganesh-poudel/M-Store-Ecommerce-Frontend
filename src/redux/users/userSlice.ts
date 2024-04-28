@@ -1,11 +1,6 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { InitialState, UserType } from "./user";
+import { createSlice } from "@reduxjs/toolkit";
 
-// let userState: UserType | null = null;
-// const data = localStorage.getItem("userInformation");
-// if (data !== null) {
-//   userState = JSON.parse(data);
-// }
+import { InitialState} from "./user";
 
 const initialState: InitialState = {
   users: [],

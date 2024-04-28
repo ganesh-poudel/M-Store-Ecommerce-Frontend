@@ -1,43 +1,78 @@
-# Getting Started with Create React App
+# M-Store
 
-This project is was bootstrapped with
-[Create React App.](https://steady-pasca-b7d483.netlify.app/)
+Welcome to M-Store, a frontend project developed with React, Typescript, Redux Toolkit, React Router Dom, and Tailwind CSS. Shoplyst aims to provide a user-friendly ecommerce experience, enabling customers to effortlessly explore various product categories like electronics, clothing, and furniture for online purchase. 
 
-### Available Scripts
-In the project directory, you can run:
+## Project Overview
+M-Store is the frontend part of a Fullstack Project developed at Integrify Trainning. It seamlessly integrates with an API developed in Express.js with TypeScript, ensuring dynamic product data and efficient admin product management with proper authentication.
 
-### npm start / yarn run start
-Runs the app in the development mode.<br>
-Open http://localhost:3000 to view it in your browser.
+## Table of Contents
 
-## Requirements
-## Requirements
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Folder Structure](#folder-structure)
+- [Technology Used](#contributing)
+- [License](#license)
 
-### Basic requirements
+## Features
 
-The Front end project must use TypeScript and Redux toolkit.
+- **Product Catalog**: Browse list of products.
+- **User Authentication**: Register, login, and manage your account.
+- **Admin Authentication**: Add, delete and update products and categories also manage user account
+- **Shopping Cart**: Add and remove products to/from the cart.
+- **Checkout Process**: Create Order in DataBase.
+- **Orders**: Show all Orders belongs the the login user.
 
-1. Use the API endpoint `https://fakeapi.platzi.com/`.
+## Installation
 
-2. Create at lease 4 pages (can be more if you want): Page for all products, product page, profile page (only available if user logins), and cart page (cart page could be a page or a modal)
+To run this project locally, follow these steps:
 
-3. Create Redux store for following features:
+1. Clone this repository:
 
-   - product reducer: get all products, find a single products, filter products by categories, sort products by price. Create, update and delete a product (enable update & delete features only for admin of the webapp)
-   - user reducer: register and login
-   - cart reducer: add product to cart, remove products, update products's quantity in cart
+   ```bash
+         git clone https://github.com/ganesh-poudel/M-Store-Ecommerce-Frontend.git
 
-4. When adding routers to your application, set certain routes to be private. For example, route to user profile page should not be accessible if user has not logged in.
+   ```
 
-5. Styling: must have responsive
+2. Navigate into the project directory:
 
-6. Implement unit testing for the reducers
+   ```bash
+         cd fs17-Frontend-project
+   ```
 
-7. **Deploy** the application and rewrite README file.
+3. Install dependencies:
 
-### Additional features:
+   ```bash
+       npm install
+   ```
+
+
+
+## Usage
+
+4. After completing the installation steps, you can start the development server:
+
+      ```bash
+         npm start
+      ```
+The application will be running at http://localhost:3000 by default.
+
+
+
+### Folder Structure
+   ![screenshot](screen.png)
+
 
 - Use Context API to switch theme
 - Use pagination when fetching/displaying all the products
 - Implement performance optimization where applicable
 
+### Technology Used:
+
+- TypeScript
+- Redux Toolkit
+- Formik
+- Tailwind CSS
+- DaisyUI
+- React
+- React Router

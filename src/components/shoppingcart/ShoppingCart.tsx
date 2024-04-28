@@ -1,25 +1,50 @@
-import { Fragment, useState } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+
 import { AppState } from '../../redux/store';
-import { Link, useNavigate } from 'react-router-dom';
-import { addCartItemQuantity, removeCartItemQuantity, removeItemFromCart } from '../../redux/cart/cartSlice';
+import { addCartItemQuantity, removeCartItemQuantity, removeItemFromCart, resetCart } from '../../redux/cart/cartSlice';
+
 
 const ShoppingCart = () => {
-  const [open, setOpen] = useState(true);
   const cartItems = useSelector((state: AppState) => state.cartReducer.shoppingList);
-  const navigate = useNavigate();
+  const token = useSelector((state: AppState) => state.authReducer.accessToken);
+  const userId = useSelector((state: AppState) => state.authReducer.user?._id);
+
   const dispatch = useDispatch();
 
-  const prices = cartItems.map((product) => product.price);
-  const total = prices.reduce((acc, curr) => acc + curr, 0);
-  console.log('price', prices);
+  const prices = cartItems.map((cart) => cart.product.price * cart.quantity);
 
-  // const checkOutHandler = () => {
-  //   dispatch(cartCheckOut());
-  //   navigate("/checkout");
-  // };
+  const totalPrice = prices.reduce((acc, curr) => acc + curr, 0);
+ 
+  const quantity = cartItems.map((cart) => cart.quantity);
+  const totalQuantity = quantity.reduce((acc, curr) => acc + curr, 0);
+ 
+
+  const checkOutHandler = () => {
+   
+    const url = `http://localhost:8080/api/v1/orders/${userId}`;
+    axios
+      .post(
+        url,
+        { items: cartItems, userId: userId },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        if (response.status === 201) {
+          alert('order is create successfully');
+          dispatch(resetCart());
+        }
+        if (response.status === 403) {
+          alert('please log in to create order');
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="container mx-auto mt-10">
@@ -40,11 +65,11 @@ const ShoppingCart = () => {
               <div className="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
                 <div className="flex w-2/5">
                   <div className="w-20">
-                    <img className="h-24" src={item.images[0]} alt={item.name} />
+                    <img className="h-24" src={item.product.images[0]} alt={item.product.name} />
                   </div>
                   <div className="flex flex-col justify-between ml-4 flex-grow">
-                    <span className="font-bold text-sm">{item.name}</span>
-                    <span className="text-red-500 text-xs capitalize">{item.category.title}</span>
+                    <span className="font-bold text-sm">{item.product.name}</span>
+                    <span className="text-red-500 text-xs capitalize">{item.product.category.title}</span>
                     <div
                       className="font-semibold hover:text-red-500 text-gray-500 text-xs cursor-pointer"
                       onClick={() => dispatch(removeItemFromCart(item))}
@@ -72,9 +97,9 @@ const ShoppingCart = () => {
                     <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
                   </svg>
                 </div>
-                <span className="text-center w-1/5 font-semibold text-sm">€{item?.price}</span>
+                <span className="text-center w-1/5 font-semibold text-sm">€{item.product.price}</span>
                 <span className="text-center w-1/5 font-semibold text-sm">
-                  €{(item?.price * item.quantity).toFixed(2)}
+                  €{(item?.product.price * item.quantity).toFixed(2)}
                 </span>
               </div>
             );
@@ -92,20 +117,21 @@ const ShoppingCart = () => {
           <h1 className="font-semibold text-2xl border-b pb-8">Order Summary</h1>
           <div className="flex flex-wrap justify-between mt-10">
             <span className="font-semibold text-sm uppercase">Total Items </span>
-            <span className="font-semibold text-sm">€{total?.toFixed(2)}</span>
+            <span className="font-semibold text-sm">{totalQuantity?.toFixed(2)}</span>
           </div>
 
           <div className="border-t mt-8">
             <div className="flex font-semibold justify-between py-6 text-sm uppercase">
               <span>Total cost</span>
-              <span>€ {total.toFixed(2)}</span>
+              <span>€ {totalPrice.toFixed(2)}</span>
             </div>
-            <Link
-              to="/checkout"
+
+            <button
               className="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 p-2 text-sm text-white uppercase w-full"
+              onClick={checkOutHandler}
             >
-              Checkout
-            </Link>
+              Pay
+            </button>
           </div>
         </div>
       </div>

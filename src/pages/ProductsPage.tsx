@@ -1,18 +1,17 @@
+import { ChangeEvent } from 'react';
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { debounce } from 'lodash';
+
 import {
   useFilterByTitleQuery,
   useGetAllProductsQuery,
   useLazyGetProductByFilterQuery,
 } from '../redux/products/product.api';
-
-import { useSelector } from 'react-redux';
 import { AppState } from '../redux/store';
 import { useGetAllCategoryQuery } from '../redux/category/categoryApi';
 import ProductCard from '../components/card/ProductCard';
-import { ChangeEvent } from 'react';
-
 import { Filter, Size } from '../redux/products/product';
-import { useState } from 'react';
-import { debounce } from 'lodash';
 
 const ProductsPage = () => {
   const [inputError, setInputError] = useState('');
@@ -23,20 +22,11 @@ const ProductsPage = () => {
     max_price: Infinity,
     size: '',
   });
-  const [reset, setReset] = useState({
-    defaultCategory: '  Pick a Category',
-    defaultMinPrice: 0,
-    defaultMaxPrice: Infinity,
-    defaultSize: 'Pick a size',
-  });
-  console.log('request data', requestData);
-  // const requestData: Partial<Filter> = { min_price: 1250, max_price: 1500, category: '' };
 
   const searchProduct = useSelector((state: AppState) => state.productReducer.searchString);
-  // console.log('search word', searchProduct);
   let { data: products } = useGetAllProductsQuery();
   const { data: allCategory } = useGetAllCategoryQuery();
-  // console.log('category', allCategory);
+
   const { data: searchProductbyName } = useFilterByTitleQuery(searchProduct);
   const [getFilteredData, { data: filteredProduct }] = useLazyGetProductByFilterQuery();
   console.log('filtered data ...', filteredProduct);
@@ -74,14 +64,6 @@ const ProductsPage = () => {
     });
 
     await getFilteredData(requestData);
-    // .unwrap()
-    // .then((data) => {
-    //   // Handle the data
-
-    // })
-    // .catch((err) => {
-    //   // Handle errors
-    // });
   };
 
   const debouncePriceHandler = debounce(priceHandler, 500);
@@ -90,9 +72,7 @@ const ProductsPage = () => {
     console.log('abc', requestData);
     await getFilteredData(requestData)
       .unwrap()
-      .then((data) => {
-        // products = filteredProduct;
-      })
+      .then((data) => {})
       .catch((err) => {
         alert('Product not found');
         setInputError(err.data.message);

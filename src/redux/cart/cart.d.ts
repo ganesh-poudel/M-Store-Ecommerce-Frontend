@@ -1,7 +1,10 @@
 import { ProductType } from '../products/product';
 
 export type CartInitialState = {
-  shoppingList: ProductType[];
+  shoppingList: Cart[];
+};
+
+export type Cart = {
+  product: ProductType;
   quantity: number;
-  totalPrice: number;
 };

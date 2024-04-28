@@ -1,5 +1,3 @@
-import React from 'react';
-
 const HeartIcon = () => {
   return (
     <svg fill="#000000" className="h-8 w-8" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
