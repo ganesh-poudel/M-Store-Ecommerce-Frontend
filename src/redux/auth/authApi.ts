@@ -5,7 +5,7 @@ import { UserType } from '../users/user';
 import { AppState } from '../store';
 
 export const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:8080/api/v1',
+  baseUrl: 'https://m-store-express-backend.onrender.com/api/v1',
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as AppState).authReducer.accessToken;
     // If we have a token set in state, let's assume that we should be passing it.

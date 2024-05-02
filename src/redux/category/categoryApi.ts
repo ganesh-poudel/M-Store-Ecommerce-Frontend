@@ -5,7 +5,7 @@ import { Category } from './category';
 
 export const categoryApi = createApi({
   reducerPath: 'categoryApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080/api/v1' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://m-store-express-backend.onrender.com/api/v1' }),
   tagTypes: ['Category'],
   endpoints: (builder) => ({
     getAllCategory: builder.query<Category[], void>({

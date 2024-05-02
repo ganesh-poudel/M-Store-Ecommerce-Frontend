@@ -4,7 +4,7 @@ import { ProductType, CreateProductType,  Product, Filter } from './product';
 
 export const productsApi = createApi({
   reducerPath: 'productsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080/api/v1' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://m-store-express-backend.onrender.com/api/v1' }),
   tagTypes: ['Products'],
   endpoints: (builder) => ({
     getAllProducts: builder.query<Product, void>({

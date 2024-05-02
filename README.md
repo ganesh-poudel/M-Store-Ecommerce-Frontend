@@ -76,3 +76,6 @@ The application will be running at http://localhost:3000 by default.
 - DaisyUI
 - React
 - React Router
+
+### Live Demo
+ Check the live link here [https://steady-pasca-b7d483.netlify.app](https://steady-pasca-b7d483.netlify.app)
